@@ -10,8 +10,21 @@ namespace DataBase.Entities
         [Required]
         public string EncMessage { get; set; }
         [Required]
-        public User Sender { get; set; }
+        public long SenderId { get; set; }
         [Required]
+        public long ReceiverId { get; set; }
+
+        public User Sender { get; set; }
         public User Receiver { get; set; }
+        public Message(string encMessage, long senderId, long receiverId)
+        {
+            EncMessage = encMessage;
+            SenderId = senderId;
+            ReceiverId = receiverId;
+        }
+
+        internal Message() { }
+
+        
     }
 }

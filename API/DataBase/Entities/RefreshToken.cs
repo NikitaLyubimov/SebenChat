@@ -18,13 +18,15 @@ namespace DataBase.Entities
         [Required]
         public long UserId { get; set; }
 
-        public RefreshToken(string token, DateTime expires, string remoteIp)
+        public RefreshToken(string token, DateTime expires, string remoteIp, long userId)
         {
             Token = token;
             Expires = expires;
             RemoteIpAddress = remoteIp;
-            UserId = UserId;
+            UserId = userId;
         }
+
+        internal RefreshToken() { }
 
     }
 }

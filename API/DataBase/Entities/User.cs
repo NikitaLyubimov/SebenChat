@@ -20,7 +20,8 @@ namespace DataBase.Entities
 
         public ICollection<RefreshToken> RefreshTokens { get; set; }
 
-        public ICollection<Message> Messages { get; set; }
+        public ICollection<Message> MessagesSender { get; set; }
+        public ICollection<Message> MessagesReceiver { get; set; }
 
         public User(string firstName, string secondName, string userName, string email, string identityId)
         {
