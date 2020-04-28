@@ -1,19 +1,16 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using System.Text;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 using DataBase.Entities;
 using DataBase;
-using Microsoft.EntityFrameworkCore;
+using API.Tokens;
+
 
 namespace API
 {
@@ -33,6 +30,18 @@ namespace API
 
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default"), b => b.MigrationsAssembly("DataBase")));
             services.AddDbContext<AppDbIdentityContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default"), b => b.MigrationsAssembly("DataBase")));
+
+
+            var secretKey = Configuration.GetSection("AuthSettings")["SecretKey"];
+            var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
+
+            var jwtAppSettingsOptions = Configuration.GetSection("JwtIssuerOptions");
+            services.Configure<JwtSecurityOptions>(options =>
+            {
+                options.Issuer = jwtAppSettingsOptions["Issuer"];
+                options.Audience = jwtAppSettingsOptions["Audience"];
+                options.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
+            });
 
         }
 
