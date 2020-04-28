@@ -15,8 +15,21 @@ namespace DataBase.Entities
         public string UserName { get; set; }
         [Required]
         public string Email { get; set; }
+        [Required]
+        public string IdentityId { get; set; }
+
+        public ICollection<RefreshToken> RefreshTokens { get; set; }
 
         public ICollection<Message> Messages { get; set; }
+
+        public User(string firstName, string secondName, string userName, string email, string identityId)
+        {
+            FirstName = firstName;
+            SecondName = secondName;
+            UserName = userName;
+            Email = email;
+            IdentityId = identityId;
+        }
 
     }
 }
