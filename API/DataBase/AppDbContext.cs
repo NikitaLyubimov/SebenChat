@@ -26,11 +26,18 @@ namespace DataBase
                 .HasForeignKey(m => m.ReceiverId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<EmailConfirmToken>()
+                .HasOne(ect => ect.User)
+                .WithMany(u => u.EmailConfirmTokens)
+                .HasForeignKey(ect => ect.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+
         }
 
         public DbSet<User> Users { get; set; }
         public DbSet<Message> Messages { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+        public DbSet<EmailConfirmToken> EmailConfirmTokens { get; set; }
 
         public override int SaveChanges()
         {

@@ -12,18 +12,15 @@ using DataBase.Entities;
 using DataBase.Identity;
 using System.Linq;
 
-
 namespace DataBase.Repositories
 {
-    public class UserReposytory : IUserReposytory
+    public class UserReposytory : BaseReposytory<User, AppDbContext>, IUserReposytory
     {
         private UserManager<AppUser> _uManager;
-        private AppDbContext _db;
 
-        public UserReposytory(UserManager<AppUser> manager, AppDbContext db)
+        public UserReposytory(UserManager<AppUser> manager, AppDbContext db) : base(db)
         {
             _uManager = manager;
-            _db = db;
         }
 
         public async Task<CreateUserResponce> Create(string firstName, string secondName, string email, string userName, string password)
@@ -34,9 +31,10 @@ namespace DataBase.Repositories
             if (!identityResult.Succeeded)
                 return new CreateUserResponce(appUser.Id, false, identityResult.Errors.Select(err => new Error(err.Code, err.Description)));
             var user = new User(firstName, secondName, userName, email, appUser.Id);
-
+            
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
+            
 
             return new CreateUserResponce(appUser.Id, identityResult.Succeeded, identityResult.Succeeded ? null : identityResult.Errors.Select(err => new Error(err.Code, err.Description)));
         }

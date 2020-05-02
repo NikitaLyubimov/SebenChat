@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Text;
 
 namespace DataBase.Entities
@@ -18,10 +19,13 @@ namespace DataBase.Entities
         [Required]
         public string IdentityId { get; set; }
 
-        public ICollection<RefreshToken> RefreshTokens { get; set; }
+        private readonly List<RefreshToken> _refreshTokens = new List<RefreshToken>();
 
         public ICollection<Message> MessagesSender { get; set; }
         public ICollection<Message> MessagesReceiver { get; set; }
+        public ICollection<EmailConfirmToken> EmailConfirmTokens { get; set; }
+
+        public IReadOnlyCollection<RefreshToken> RefreshTokens => _refreshTokens.AsReadOnly();
 
         public User(string firstName, string secondName, string userName, string email, string identityId)
         {
@@ -30,6 +34,16 @@ namespace DataBase.Entities
             UserName = userName;
             Email = email;
             IdentityId = identityId;
+        }
+
+        public void AddRefreshToken(string token, long userId, string remoteIpAddress, double dayToExpire = 5)
+        {
+            _refreshTokens.Add(new RefreshToken(token, DateTime.UtcNow.AddDays(dayToExpire), remoteIpAddress, userId));  
+        }
+
+        public void RemoveRefreshToken(string token)
+        {
+            _refreshTokens.Remove(_refreshTokens.First(rt => rt.Token == token));
         }
 
     }

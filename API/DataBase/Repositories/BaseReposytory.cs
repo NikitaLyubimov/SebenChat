@@ -14,7 +14,7 @@ namespace DataBase.Repositories
         where TEntity : BaseEntity
         where TContext : DbContext
     {
-        private TContext _db;
+        protected readonly TContext _db;
 
         public BaseReposytory(TContext db)
         {

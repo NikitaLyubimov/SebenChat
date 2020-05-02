@@ -7,3 +7,4 @@ D:\Projects\EncryptChat\API\DataBase\bin\Debug\netcoreapp3.1\DataBase.runtimecon
 D:\Projects\EncryptChat\API\DataBase\bin\Debug\netcoreapp3.1\DataBase.pdb
 D:\Projects\EncryptChat\API\DataBase\obj\Debug\netcoreapp3.1\DataBase.dll
 D:\Projects\EncryptChat\API\DataBase\obj\Debug\netcoreapp3.1\DataBase.pdb
+D:\Projects\EncryptChat\API\DataBase\obj\Debug\netcoreapp3.1\DataBase.csprojAssemblyReference.cache

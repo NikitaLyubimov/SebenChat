@@ -6,8 +6,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.AspNetCore.Identity;
 
 using DataBase.Entities;
+using DataBase.Identity;
+using DataBase.Interfaces;
+using DataBase.Repositories;
 using DataBase;
 using API.Tokens;
 
@@ -31,11 +35,32 @@ namespace API
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default"), b => b.MigrationsAssembly("DataBase")));
             services.AddDbContext<AppDbIdentityContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default"), b => b.MigrationsAssembly("DataBase")));
 
+            services.AddIdentity<AppUser, IdentityRole>(o =>
+            {
+                o.Password.RequireLowercase = false;
+                o.Password.RequireUppercase = false;
+                o.Password.RequiredLength = 10;
+
+                o.User.RequireUniqueEmail = true;
+
+                o.SignIn.RequireConfirmedEmail = true;
+            })
+             .AddEntityFrameworkStores<AppDbIdentityContext>()
+             .AddDefaultTokenProviders();
+
+
 
             var secretKey = Configuration.GetSection("AuthSettings")["SecretKey"];
             var signingKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(secretKey));
 
             var jwtAppSettingsOptions = Configuration.GetSection("JwtIssuerOptions");
+
+
+            services.AddScoped<UserReposytory>();
+            services.AddScoped<MessagesReposytory>();
+            services.AddScoped<JwtFactory>();
+            services.AddScoped<TokenFactory>();
+
             services.Configure<JwtSecurityOptions>(options =>
             {
                 options.Issuer = jwtAppSettingsOptions["Issuer"];
