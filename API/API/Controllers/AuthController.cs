@@ -17,7 +17,7 @@ using API.Tokens;
 using API.ViewModels.Request;
 using API.ViewModels.Responce;
 using API.ViewModels;
-
+using System.IO;
 
 namespace API.Controllers
 {
@@ -82,9 +82,22 @@ namespace API.Controllers
         [HttpPost("register")]
         public async Task<ActionResult> Register([FromBody]RegisterRequest request)
         {
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
 
+            var responce = await _userReposytory.Create(request.FirstName, request.SecondName, request.Email, request.UserName, request.Password);
 
+            if(responce.Success)
+            {
+                var emailConfToken = _tokenFactory.GenerateToken();
 
+                EmailSettings settings = new EmailSettings();
+                using (StreamReader reader = new StreamReader($@"{Environment.CurrentDirectory}\emailData.json"))
+                {
+                    string json = reader.ReadToEnd();
+                    settings = JsonConvert.DeserializeObject<EmailSettings>(json);
+                }
+            }
         }
     }
 }

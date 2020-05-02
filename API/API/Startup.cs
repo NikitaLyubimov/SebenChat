@@ -60,6 +60,7 @@ namespace API
             services.AddScoped<MessagesReposytory>();
             services.AddScoped<JwtFactory>();
             services.AddScoped<TokenFactory>();
+            services.AddScoped<EmailTokenReposytory>();
 
             services.Configure<JwtSecurityOptions>(options =>
             {

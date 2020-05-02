@@ -11,7 +11,7 @@ using System.Threading.Tasks;
 namespace DataBase.Repositories
 {
     public abstract class BaseReposytory<TEntity, TContext> : IReposytory<TEntity>
-        where TEntity : BaseEntity
+        where TEntity : BaseEntity, class
         where TContext : DbContext
     {
         protected readonly TContext _db;
