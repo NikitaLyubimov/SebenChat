@@ -10,7 +10,7 @@ using DataBase.DTO;
 namespace DataBase.Interfaces
 {
     public interface IReposytory<TEntity> 
-        where TEntity : BaseEntity 
+        where TEntity : class
     {
         Task<TEntity> Add(TEntity ent);
         Task<List<TEntity>> GetAll();

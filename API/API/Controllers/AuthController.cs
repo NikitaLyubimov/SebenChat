@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.IO;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -17,7 +18,7 @@ using API.Tokens;
 using API.ViewModels.Request;
 using API.ViewModels.Responce;
 using API.ViewModels;
-using System.IO;
+using API.Actions;
 
 namespace API.Controllers
 {
@@ -29,14 +30,25 @@ namespace API.Controllers
         private JwtFactory _jwtFactory;
         private TokenFactory _tokenFactory;
         private UserManager<AppUser> _uManager;
+        private EmailActions _emailAct;
+        private IHttpContextAccessor _httpContextAccessor;
 
-        public AuthController(UserReposytory uReposytory, JwtFactory jwtFactory, TokenFactory tokenfactory, UserManager<AppUser> uManager)
+        public AuthController(UserReposytory uReposytory, JwtFactory jwtFactory, TokenFactory tokenfactory, 
+            UserManager<AppUser> uManager, EmailActions emailAct, IHttpContextAccessor httpContextAccessor)
         {
             _userReposytory = uReposytory;
             _jwtFactory = jwtFactory;
             _tokenFactory = tokenfactory;
             _uManager = uManager;
+            _emailAct = emailAct;
+            _httpContextAccessor = httpContextAccessor;
 
+        }
+        [HttpGet("index")]
+        public async Task<string> Index()
+        {
+            await Task.Delay(1);
+            return "dsa";
         }
 
         [HttpPost("login")]
@@ -65,7 +77,7 @@ namespace API.Controllers
 
                         AccessToken acToken = await _jwtFactory.GenerateEncodedToken(user.IdentityId, user.UserName);
                         json.StatusCode = (int)HttpStatusCode.OK;
-                        json.Content = JsonConvert.SerializeObject(new LoginResponce(acToken, refreshToken));
+                        json.Content = JsonConvert.SerializeObject(new LoginResponce(acToken, refreshToken), settings);
 
                         return json;
                         
@@ -86,17 +98,23 @@ namespace API.Controllers
                 return BadRequest(ModelState);
 
             var responce = await _userReposytory.Create(request.FirstName, request.SecondName, request.Email, request.UserName, request.Password);
+            var user = await _userReposytory.FindByName(responce.UserName);
 
-            if(responce.Success)
+            ContentResult json = new ContentResult();
+            json.ContentType = "application/json";
+            JsonSerializerSettings settings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), NullValueHandling = NullValueHandling.Ignore };
+            if (responce.Success)
             {
-                var emailConfToken = _tokenFactory.GenerateToken();
-
-                EmailSettings settings = new EmailSettings();
-                using (StreamReader reader = new StreamReader($@"{Environment.CurrentDirectory}\emailData.json"))
-                {
-                    string json = reader.ReadToEnd();
-                    settings = JsonConvert.DeserializeObject<EmailSettings>(json);
-                }
+                await _emailAct.SenMessage(_tokenFactory, request.Email,user.Id, _httpContextAccessor.HttpContext.Request.Host.Value);
+                json.StatusCode = (int)HttpStatusCode.OK;
+                json.Content = JsonConvert.SerializeObject(new RegisterResponce(responce.Id, true), settings);
+                return json;
+            }
+            else
+            {
+                json.StatusCode = (int)HttpStatusCode.BadRequest;
+                json.Content = JsonConvert.SerializeObject(new RegisterResponce(responce.Errors.Select(x => x.Description)), settings);
+                return json;
             }
         }
     }

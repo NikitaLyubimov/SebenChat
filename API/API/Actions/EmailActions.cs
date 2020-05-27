@@ -7,10 +7,11 @@ using System.Net.Mail;
 using System.Net;
 
 using DataBase.Repositories;
+using DataBase.Entities;
 using API.Tokens;
 using API.ViewModels;
 using Newtonsoft.Json;
-
+using System.Web;
 
 namespace API.Actions
 {
@@ -21,30 +22,37 @@ namespace API.Actions
         {
             _tokenReposytory = tokenReposytory;
         }
-        public void SenMessage(TokenFactory tokenFactory, string receiverEmail, string appUrl)
+        public async Task SenMessage(TokenFactory tokenFactory, string receiverEmail,long userId, string appUrl)
         {
-            var emailConfToken = tokenFactory.GenerateToken();
+            string emailConfToken = tokenFactory.GenerateToken();
+
+            EmailConfirmToken newToken = new EmailConfirmToken(emailConfToken, userId);
+            await _tokenReposytory.Add(newToken);
 
             EmailSettings settings = new EmailSettings();
+
             using (StreamReader reader = new StreamReader($@"{Environment.CurrentDirectory}\emailData.json"))
             {
                 string json = reader.ReadToEnd();
                 settings = JsonConvert.DeserializeObject<EmailSettings>(json);
             }
 
-            var emailMessage = new MailMessage();
+            var from = new MailAddress(settings.Email);
+            var to = new MailAddress(receiverEmail);
+            var m = new MailMessage(from, to);
 
-            emailMessage.From = new MailAddress(settings.Email);
-            emailMessage.To.Add(new MailAddress(receiverEmail));
-            emailMessage.Subject = "Confirm Email";
-            emailMessage.Body = $@"Confirm your email by following this link: {appUrl}/verify?token={emailConfToken}";
+            string encToken = emailConfToken.Trim().Replace("+", "%252b");
+
+            m.Subject = "Confirm Email";
+            m.Body = $@"Confirm your email by following this link: https://{appUrl}/api/verify?token={HttpUtility.UrlEncode(encToken)}";
 
 
             SmtpClient client = new SmtpClient();
-            client.Host = settings.SmtpDomain;
-            client.Port = 587;
             client.Credentials = new NetworkCredential(settings.Email, settings.Password);
-            client.Send(emailMessage);
+            client.Host = settings.SmtpDomain;
+            client.Credentials = new NetworkCredential(settings.Email, settings.Password);
+            client.EnableSsl = true;
+            client.Send(m);
 
         }
     }

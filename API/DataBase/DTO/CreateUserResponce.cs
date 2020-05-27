@@ -7,10 +7,12 @@ namespace DataBase.DTO
     public class CreateUserResponce : BaseResponce
     {
         public string Id { get; set; }
-
-        public CreateUserResponce(string id, bool success = false, IEnumerable<Error> errors = null) : base(success, errors)
+        public string UserName { get; set; }
+       
+        public CreateUserResponce(string id,string userName, bool success = false, IEnumerable<Error> errors = null) : base(success, errors)
         {
             Id = id;
+            UserName = userName;
         }
     }
 }

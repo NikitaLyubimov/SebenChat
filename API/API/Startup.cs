@@ -14,7 +14,10 @@ using DataBase.Interfaces;
 using DataBase.Repositories;
 using DataBase;
 using API.Tokens;
-
+using API.Actions;
+using Microsoft.AspNetCore.Http;
+using System;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 namespace API
 {
@@ -56,11 +59,9 @@ namespace API
             var jwtAppSettingsOptions = Configuration.GetSection("JwtIssuerOptions");
 
 
-            services.AddScoped<UserReposytory>();
-            services.AddScoped<MessagesReposytory>();
-            services.AddScoped<JwtFactory>();
-            services.AddScoped<TokenFactory>();
-            services.AddScoped<EmailTokenReposytory>();
+
+
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             services.Configure<JwtSecurityOptions>(options =>
             {
@@ -68,6 +69,46 @@ namespace API
                 options.Audience = jwtAppSettingsOptions["Audience"];
                 options.SigningCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
             });
+
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateIssuer = true,
+                ValidIssuer = jwtAppSettingsOptions["Issuer"],
+
+                ValidateAudience = true,
+                ValidAudience = jwtAppSettingsOptions["Audience"],
+
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = signingKey,
+
+                RequireExpirationTime = true,
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(confOptions =>
+            {
+                confOptions.ClaimsIssuer = jwtAppSettingsOptions["Issuer"];
+                confOptions.TokenValidationParameters = tokenValidationParameters;
+                confOptions.SaveToken = true;
+            });
+
+            services.AddAuthorization(options =>
+            {
+                options.AddPolicy("ApiUser", policy => policy.RequireClaim("rol", "api_access"));
+            });
+
+
+            services.AddScoped<UserReposytory>();
+            services.AddScoped<MessagesReposytory>();
+            services.AddScoped<JwtFactory>();
+            services.AddScoped<TokenFactory>();
+            services.AddScoped<EmailTokenReposytory>();
+            services.AddScoped<EmailActions>();
 
         }
 
@@ -84,6 +125,7 @@ namespace API
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {

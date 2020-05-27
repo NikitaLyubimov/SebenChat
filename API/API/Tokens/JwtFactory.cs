@@ -8,15 +8,16 @@ using System.Security.Principal;
 using System.Threading.Tasks;
 
 using API.ViewModels;
+using Microsoft.Extensions.Options;
 
 namespace API.Tokens
 {
     public class JwtFactory
     {
         private JwtSecurityOptions _securityOptions;
-        public JwtFactory(JwtSecurityOptions options)
+        public JwtFactory(IOptions<JwtSecurityOptions> options)
         {
-            _securityOptions = options;
+            _securityOptions = options.Value;
         }
 
         public async Task<AccessToken> GenerateEncodedToken(string id, string userName)
