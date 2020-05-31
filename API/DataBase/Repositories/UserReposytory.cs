@@ -42,9 +42,15 @@ namespace DataBase.Repositories
         public async Task<User> FindByName(string userName)
         {
             var appUser = await _uManager.FindByNameAsync(userName);
-            var user = await _db.Users.FirstOrDefaultAsync(x => x.IdentityId == appUser.Id);
+            var user = await _db.Users.Include(u => u.RefreshTokens).FirstOrDefaultAsync(x => x.IdentityId == appUser.Id);
             return appUser == null ? null : user; 
 
+        }
+
+        public async Task<User> GetByIdentityId(string id)
+        {
+            var user = await _db.Users.Include(u => u.RefreshTokens).FirstOrDefaultAsync(x => x.IdentityId == id);
+            return user == null ? null : user;
         }
     }
 }

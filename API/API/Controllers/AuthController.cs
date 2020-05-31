@@ -1,14 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text;
 using System.Net;
 using System.IO;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using System.IdentityModel.Tokens.Jwt;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using Microsoft.Extensions.Options;
+
 
 
 using DataBase.Identity;
@@ -17,6 +23,7 @@ using DataBase.Repositories;
 using API.Tokens;
 using API.ViewModels.Request;
 using API.ViewModels.Responce;
+using API.ViewModels.Settings;
 using API.ViewModels;
 using API.Actions;
 
@@ -32,9 +39,10 @@ namespace API.Controllers
         private UserManager<AppUser> _uManager;
         private EmailActions _emailAct;
         private IHttpContextAccessor _httpContextAccessor;
+        private AuthSettings _authSettings;
 
         public AuthController(UserReposytory uReposytory, JwtFactory jwtFactory, TokenFactory tokenfactory, 
-            UserManager<AppUser> uManager, EmailActions emailAct, IHttpContextAccessor httpContextAccessor)
+            UserManager<AppUser> uManager, EmailActions emailAct, IHttpContextAccessor httpContextAccessor, IOptions<AuthSettings> authSettings)
         {
             _userReposytory = uReposytory;
             _jwtFactory = jwtFactory;
@@ -42,6 +50,7 @@ namespace API.Controllers
             _uManager = uManager;
             _emailAct = emailAct;
             _httpContextAccessor = httpContextAccessor;
+            _authSettings = authSettings.Value;
 
         }
         [HttpGet("index")]
@@ -116,6 +125,64 @@ namespace API.Controllers
                 json.Content = JsonConvert.SerializeObject(new RegisterResponce(responce.Errors.Select(x => x.Description)), settings);
                 return json;
             }
+        }
+
+        [HttpPost("refresh")]
+        public async Task<ActionResult> Refresh([FromBody]RefreshRequest request)
+        {
+            var cp = GetPrincipal(request.AccessToken);
+
+            ContentResult json = new ContentResult();
+            json.ContentType = "application/json";
+            JsonSerializerSettings settings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), NullValueHandling = NullValueHandling.Ignore };
+
+            if (cp != null)
+            {
+                var id = cp.Claims.First(c => c.Type == "id");
+                var user = await _userReposytory.GetByIdentityId(id.Value);
+
+                
+
+                if(user.HasValidRefreshTokens(request.RefreshToken))
+                {
+                    var jwtToken = await _jwtFactory.GenerateEncodedToken(user.IdentityId, user.UserName);
+                    var refreshToken = _tokenFactory.GenerateToken();
+                    user.RemoveRefreshToken(request.RefreshToken);
+                    user.AddRefreshToken(refreshToken, user.Id, "");
+                    await _userReposytory.Update(user);
+
+                    json.StatusCode = (int)HttpStatusCode.OK;
+                    json.Content = JsonConvert.SerializeObject(new RefreshResponce(jwtToken, refreshToken, true));
+
+                    return json;
+
+                }
+            }
+
+            json.StatusCode = (int)HttpStatusCode.BadRequest;
+            json.Content = JsonConvert.SerializeObject(new RefreshResponce(null, null, false, "Invalid token"));
+            return json;
+        }
+
+        private ClaimsPrincipal GetPrincipal(string token)
+        {
+            var tokenValidationParameters = new TokenValidationParameters
+            {
+                ValidateAudience = false,
+                ValidateIssuer = false,
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_authSettings.SecretKey)),
+                ValidateLifetime = false
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            SecurityToken secToken;
+            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out secToken);
+            var jwtSecToken = secToken as JwtSecurityToken;
+
+            if (jwtSecToken == null || !jwtSecToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+                throw new SecurityTokenException("Invalid token");
+            return principal;
         }
     }
 }

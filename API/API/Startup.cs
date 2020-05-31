@@ -1,4 +1,6 @@
+using System;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -7,6 +9,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 
 using DataBase.Entities;
 using DataBase.Identity;
@@ -15,9 +19,8 @@ using DataBase.Repositories;
 using DataBase;
 using API.Tokens;
 using API.Actions;
-using Microsoft.AspNetCore.Http;
-using System;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
+using API.ViewModels.Settings;
+
 
 namespace API
 {
@@ -37,6 +40,9 @@ namespace API
 
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default"), b => b.MigrationsAssembly("DataBase")));
             services.AddDbContext<AppDbIdentityContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default"), b => b.MigrationsAssembly("DataBase")));
+
+            var authSettings = Configuration.GetSection(nameof(AuthSettings));
+            services.Configure<AuthSettings>(authSettings);
 
             services.AddIdentity<AppUser, IdentityRole>(o =>
             {
@@ -95,12 +101,24 @@ namespace API
                 confOptions.ClaimsIssuer = jwtAppSettingsOptions["Issuer"];
                 confOptions.TokenValidationParameters = tokenValidationParameters;
                 confOptions.SaveToken = true;
+
+                confOptions.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException))
+                        {
+                            context.Response.Headers.Add("Token-Expired", "true");
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
 
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("ApiUser", policy => policy.RequireClaim("rol", "api_access"));
-            });
+            }); 
 
 
             services.AddScoped<UserReposytory>();

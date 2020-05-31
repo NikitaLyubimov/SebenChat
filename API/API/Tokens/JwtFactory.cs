@@ -26,7 +26,7 @@ namespace API.Tokens
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, _securityOptions.Subject),
+                new Claim(JwtRegisteredClaimNames.Sub, userName),
                 new Claim(JwtRegisteredClaimNames.Jti, await _securityOptions.JTIGenerator()),
                 new Claim(JwtRegisteredClaimNames.Iat, ToUnixEpochDate(_securityOptions.IssuedAt).ToString(), ClaimValueTypes.Integer64),
                 identity.FindFirst("rol"),

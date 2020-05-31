@@ -27,13 +27,24 @@ namespace DataBase.Entities
 
         public IReadOnlyCollection<RefreshToken> RefreshTokens => _refreshTokens.AsReadOnly();
 
-        public User(string firstName, string secondName, string userName, string email, string identityId)
+        internal User() { }
+
+        internal User(string firstName, string secondName, string userName, string email, string identityId)
         {
             FirstName = firstName;
             SecondName = secondName;
             UserName = userName;
             Email = email;
             IdentityId = identityId;
+
+            MessagesSender = new List<Message>();
+            MessagesReceiver = new List<Message>();
+           
+        }
+
+        public bool HasValidRefreshTokens(string refreshToken)
+        {
+            return _refreshTokens.Any(rt => rt.Token == refreshToken);
         }
 
         public void AddRefreshToken(string token, long userId, string remoteIpAddress, double dayToExpire = 5)
