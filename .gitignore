@@ -1,3 +1,4 @@
 .vs
 Migrations
 emailData.json
+node_modules

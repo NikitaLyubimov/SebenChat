@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net;
-using System.IO;
 using System.Threading.Tasks;
 using System.Security.Claims;
 using System.IdentityModel.Tokens.Jwt;
@@ -152,7 +150,7 @@ namespace API.Controllers
                     await _userReposytory.Update(user);
 
                     json.StatusCode = (int)HttpStatusCode.OK;
-                    json.Content = JsonConvert.SerializeObject(new RefreshResponce(jwtToken, refreshToken, true));
+                    json.Content = JsonConvert.SerializeObject(new RefreshResponce(jwtToken, refreshToken, true), settings);
 
                     return json;
 
@@ -160,7 +158,7 @@ namespace API.Controllers
             }
 
             json.StatusCode = (int)HttpStatusCode.BadRequest;
-            json.Content = JsonConvert.SerializeObject(new RefreshResponce(null, null, false, "Invalid token"));
+            json.Content = JsonConvert.SerializeObject(new RefreshResponce(null, null, false, "Invalid token"), settings);
             return json;
         }
 
