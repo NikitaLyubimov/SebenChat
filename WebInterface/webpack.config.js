@@ -7,7 +7,8 @@ module.exports = {
     entry: "./src/index.js",
     output: {
         path: path.join(__dirname, "/build"),
-        filename: "build.js"
+        filename: "build.js",
+        publicPath: '/'
     },
 
     module: {
@@ -62,6 +63,7 @@ module.exports = {
         port: 9000,
         watchContentBase: true,
         progress: true,
+        historyApiFallback: true
     },
     plugins: [
         new ExtractTextPlugin({
