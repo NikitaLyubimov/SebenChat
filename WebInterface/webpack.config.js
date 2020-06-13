@@ -1,10 +1,11 @@
 const path = require("path")
 const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const UglifyJsPlugin = require("uglifyjs-webpack-plugin");
+const ImageMinPlugin = require("imagemin-webpack");
 
 
 module.exports = {
-    entry: "./src/index.js",
+    entry: ['@babel/polyfill', "./src/index.js"],
     output: {
         path: path.join(__dirname, "/build"),
         filename: "build.js",
@@ -69,6 +70,15 @@ module.exports = {
         new ExtractTextPlugin({
             filename: './style.css',
         }),
+        new ImageMinPlugin({
+            bail: false,
+            cache: true,
+            imageminOptions: {
+                plugins: [
+                    ["gifsicle", {interlaced: true}]
+                ]
+            }
+        })
 
     ],
     optimization:{
