@@ -32,6 +32,10 @@ namespace DataBase
                 .HasForeignKey(ect => ect.UserId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+            modelBuilder.Entity<User>()
+                .HasIndex(u => u.UserName)
+                .IsUnique();
+
         }
 
         public DbSet<User> Users { get; set; }

@@ -49,9 +49,10 @@ namespace API
                 o.Password.RequireLowercase = false;
                 o.Password.RequireUppercase = false;
                 o.Password.RequiredLength = 10;
+                
 
                 o.User.RequireUniqueEmail = true;
-
+                
                 o.SignIn.RequireConfirmedEmail = true;
             })
              .AddEntityFrameworkStores<AppDbIdentityContext>()
@@ -118,7 +119,9 @@ namespace API
             services.AddAuthorization(options =>
             {
                 options.AddPolicy("ApiUser", policy => policy.RequireClaim("rol", "api_access"));
-            }); 
+            });
+
+            services.AddCors();
 
 
             services.AddScoped<UserReposytory>();
@@ -141,6 +144,8 @@ namespace API
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(builder => builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod());
 
             app.UseAuthorization();
             app.UseAuthentication();

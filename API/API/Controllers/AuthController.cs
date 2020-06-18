@@ -105,13 +105,16 @@ namespace API.Controllers
                 return BadRequest(ModelState);
 
             var responce = await _userReposytory.Create(request.FirstName, request.SecondName, request.Email, request.UserName, request.Password);
-            var user = await _userReposytory.FindByName(responce.UserName);
+
+            IdentityErrorDescriber d = new IdentityErrorDescriber();
+
 
             ContentResult json = new ContentResult();
             json.ContentType = "application/json";
             JsonSerializerSettings settings = new JsonSerializerSettings { ContractResolver = new CamelCasePropertyNamesContractResolver(), NullValueHandling = NullValueHandling.Ignore };
             if (responce.Success)
             {
+                var user = await _userReposytory.FindByName(responce.UserName);
                 await _emailAct.SenMessage(_tokenFactory, request.Email,user.Id, _httpContextAccessor.HttpContext.Request.Host.Value);
                 json.StatusCode = (int)HttpStatusCode.OK;
                 json.Content = JsonConvert.SerializeObject(new RegisterResponce(responce.Id, true), settings);

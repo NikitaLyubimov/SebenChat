@@ -1,8 +1,8 @@
 import React from 'react';
 
-export default function ConfirmEmailPage(props)
+export default function ConfirmEmailPage()
 {
     return(
-        <p>Dear {props.username}, please check your email for confirmation link</p>
+        <p>Please check your email for confirmation link</p>
     );
 }

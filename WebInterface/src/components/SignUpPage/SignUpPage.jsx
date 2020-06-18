@@ -22,6 +22,7 @@ export default class SignUpPage extends Component{
         }
         this.handleChange = this.handleChange.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.renderRedirect = this.renderRedirect.bind(this);
     }
 
     async handleClick(event){
@@ -38,6 +39,8 @@ export default class SignUpPage extends Component{
             alert(result.errors[0]);
         else
             this.setState({redirect: true})
+
+        console.log(this.state.redirect);
     }
 
     handleChange(evt){
@@ -63,13 +66,17 @@ export default class SignUpPage extends Component{
 
     renderRedirect = () => {
         if(this.state.redirect){
+            console.log(this.state.redirect);
+
             return <Redirect to='/confirmation-message'/>
         }
     }
 
 
+
     
     render(){
+        const Redirection = this.renderRedirect();
         return(
             <section>
                <div className="login-page">
@@ -81,9 +88,10 @@ export default class SignUpPage extends Component{
                             <input onChange={this.handleChange} name="userName" defaultValue={this.state.userName} type="text" placeholder="Username"/>
                             <input onChange={this.handleChange} name="email" defaultValue={this.state.email} type="text" placeholder="Email"/>
                             <input onChange={this.handleChange} name="password" defaultValue={this.state.password} type="password" placeholder="Password"/>
-                            {this.renderRedirect}
+                            {Redirection}
                             <button  onClick={this.handleClick} className="btn btn-success">Sign Up</button>
                         </form>
+                        
                         <ErrorForm error={this.state.error}/>
                     </div>
                 </div>

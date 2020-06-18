@@ -145,3 +145,5 @@ D:\Projects\EncryptChat\API\API\obj\Debug\netcoreapp3.1\API.MvcApplicationPartsA
 D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.dll
 D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
+D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
+D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll

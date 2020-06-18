@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -12,6 +13,7 @@ namespace DataBase.Entities
         public string FirstName { get; set; }
         [Required]
         public string SecondName { get; set; }
+
         [Required]
         public string UserName { get; set; }
         [Required]

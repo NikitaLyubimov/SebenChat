@@ -1,4 +1,4 @@
-let url = "https://localhost:44345/api/auth/register";
+
 
 export default async function registerPost(firstName, secondName, userName,email, password)
 {
