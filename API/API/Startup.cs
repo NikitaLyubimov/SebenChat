@@ -20,6 +20,8 @@ using DataBase;
 using API.Tokens;
 using API.Actions;
 using API.ViewModels.Settings;
+using API.Services.Interfaces;
+using API.Services;
 
 
 namespace API
@@ -130,6 +132,8 @@ namespace API
             services.AddScoped<TokenFactory>();
             services.AddScoped<EmailTokenReposytory>();
             services.AddScoped<EmailActions>();
+
+            services.AddTransient<IUserService, UserService>();
 
         }
 
