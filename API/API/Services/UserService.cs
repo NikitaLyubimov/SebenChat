@@ -82,7 +82,7 @@ namespace API.Services
 
                         AccessToken acToken = await _jwtFactory.GenerateEncodedToken(user.IdentityId, user.UserName);
                         json.StatusCode = (int)HttpStatusCode.OK;
-                        json.Content = JsonConvert.SerializeObject(new LoginResponce(acToken, refreshToken), settings);
+                        json.Content = JsonConvert.SerializeObject(new LoginResponce(null, true, acToken, refreshToken), settings);
 
                         return json;
 
@@ -91,7 +91,8 @@ namespace API.Services
             }
 
                 json.StatusCode = (int)HttpStatusCode.Unauthorized;
-                json.Content = JsonConvert.SerializeObject(new[] { new Error("login_failure", "Invalid username or password") });
+                var error = new Error("login_failure", "Invalid username or password");
+                json.Content = JsonConvert.SerializeObject(new LoginResponce(error, false), settings);
                 return json;
             }
 

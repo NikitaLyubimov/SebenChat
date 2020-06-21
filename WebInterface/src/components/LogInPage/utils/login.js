@@ -1,5 +1,5 @@
 
-function login(userName, password){
+export default async function login(userName, password){
      var user = {
          userName: userName,
          password: password
