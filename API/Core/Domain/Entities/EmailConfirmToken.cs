@@ -3,12 +3,10 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace DataBase.Entities
+namespace Core.Domain.Entities
 {
-    public class EmailConfirmToken
+    public class EmailConfirmToken : BaseEntity
     {
-        [Required]
-        public int Id { get; set; }
         [Required]
         public string Token { get; set; }
 

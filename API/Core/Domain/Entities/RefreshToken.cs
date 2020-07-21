@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace DataBase.Entities
+namespace Core.Domain.Entities
 {
-    public class RefreshToken
+    public class RefreshToken : BaseEntity
     {
-        [Required]
-        public long Id { get; set; }
+
         [Required]
         public string Token { get; set; }
         [Required]

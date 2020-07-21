@@ -32,8 +32,8 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
-              "D:\\Projects\\EncryptChat\\API\\DataBase\\DataBase.csproj": {
-                "projectPath": "D:\\Projects\\EncryptChat\\API\\DataBase\\DataBase.csproj"
+              "D:\\Projects\\EncryptChat\\API\\DataBase\\DataAccess.csproj": {
+                "projectPath": "D:\\Projects\\EncryptChat\\API\\DataBase\\DataAccess.csproj"
               }
             }
           }
@@ -110,12 +110,12 @@
         }
       }
     },
-    "D:\\Projects\\EncryptChat\\API\\DataBase\\DataBase.csproj": {
+    "D:\\Projects\\EncryptChat\\API\\DataBase\\DataAccess.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Projects\\EncryptChat\\API\\DataBase\\DataBase.csproj",
-        "projectName": "DataBase",
-        "projectPath": "D:\\Projects\\EncryptChat\\API\\DataBase\\DataBase.csproj",
+        "projectUniqueName": "D:\\Projects\\EncryptChat\\API\\DataBase\\DataAccess.csproj",
+        "projectName": "DataAccess",
+        "projectPath": "D:\\Projects\\EncryptChat\\API\\DataBase\\DataAccess.csproj",
         "packagesPath": "C:\\Users\\Никита\\.nuget\\packages\\",
         "outputPath": "D:\\Projects\\EncryptChat\\API\\DataBase\\obj\\",
         "projectStyle": "PackageReference",

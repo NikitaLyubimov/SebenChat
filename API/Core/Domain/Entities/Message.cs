@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 
-namespace DataBase.Entities
+namespace Core.Domain.Entities
 {
     public class Message : BaseEntity
     {

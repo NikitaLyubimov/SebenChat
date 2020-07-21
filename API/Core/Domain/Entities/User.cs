@@ -1,11 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Internal;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 
-namespace DataBase.Entities
+namespace Core.Domain.Entities
 {
     public class User : BaseEntity
     {
