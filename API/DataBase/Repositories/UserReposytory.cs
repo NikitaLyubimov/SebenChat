@@ -29,7 +29,7 @@ namespace DataBase.Repositories
             var identityResult = await _uManager.CreateAsync(appUser, password);
 
             if (!identityResult.Succeeded)
-                return new CreateUserResponce(appUser.Id,userName, false, identityResult.Errors.Select(err => new Error(err.Code, err.Description)));
+                    return new CreateUserResponce(appUser.Id,userName, false, identityResult.Errors.Select(err => new Error(err.Code, err.Description)));
             var user = new User(firstName, secondName, userName, email, appUser.Id);
             
             _db.Users.Add(user);

@@ -12,10 +12,14 @@ namespace Core.DTO.UseCaseRequests
         public string UserName { get; }
         public string Password { get; }
 
-        public LoginRequest(string userName, string password)
+        public string RemoteIpAddress { get; }
+
+        public LoginRequest(string userName, string password, string remoteIpAddress)
         {
             UserName = userName;
             Password = password;
+            RemoteIpAddress = remoteIpAddress;
+            
         }
     }
 }
