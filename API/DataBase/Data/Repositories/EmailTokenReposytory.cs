@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-using DataBase.Entities;
-using DataBase;
+using Core.Domain.Entities;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataBase.Repositories
+namespace Infrustructure.Data.Repositories
 {
     public class EmailTokenReposytory : BaseReposytory<EmailConfirmToken, AppDbContext>
     {

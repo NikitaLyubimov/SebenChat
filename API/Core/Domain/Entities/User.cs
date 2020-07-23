@@ -30,7 +30,7 @@ namespace Core.Domain.Entities
 
         internal User() { }
 
-        internal User(string firstName, string secondName, string userName, string email, string identityId)
+        public User(string firstName, string secondName, string userName, string email, string identityId)
         {
             FirstName = firstName;
             SecondName = secondName;

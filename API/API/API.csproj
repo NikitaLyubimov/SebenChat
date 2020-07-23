@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\DataBase\DataAccess.csproj" />
+    <ProjectReference Include="..\DataBase\Infrustructure.csproj" />
   </ItemGroup>
 
 

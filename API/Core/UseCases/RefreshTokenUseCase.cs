@@ -31,7 +31,7 @@ namespace Core.UseCases
 
         public async Task<bool> Handle(RefreshTokenRequest message, IOutputPort<RefreshTokenResponce> outputPort)
         {
-            var principals = _jwtValidator.GetPrincipalsFromToken(message.AccessToken);
+            var principals = _jwtValidator.GetPrincipalsFromToken(message.AccessToken, message.SigningKey);
 
             if(principals != null)
             {

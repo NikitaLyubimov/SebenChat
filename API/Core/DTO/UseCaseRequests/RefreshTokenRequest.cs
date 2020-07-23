@@ -11,11 +11,12 @@ namespace Core.DTO.UseCaseRequests
     {
         public string AccessToken { get; }
         public string RefreshToken { get; }
-        
-        public RefreshTokenRequest(string accessToken, string refreshToken)
+        public string SigningKey { get; }
+        public RefreshTokenRequest(string accessToken, string refreshToken, string signingKey)
         {
             AccessToken = accessToken;
             RefreshToken = refreshToken;
+            SigningKey = signingKey;
         }
     }
 }

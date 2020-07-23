@@ -3,10 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using DataBase.Identity;
 using Microsoft.EntityFrameworkCore;
 
-namespace DataBase
+namespace Infrustructure.Identity
 {
     public class AppDbIdentityContext : IdentityDbContext<AppUser>
     {

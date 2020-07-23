@@ -4,6 +4,6 @@ namespace Core.Interfaces.Services
 {
     public interface IJwtTokenValidator
     {
-        ClaimsPrincipal GetPrincipalsFromToken(string token);
+        ClaimsPrincipal GetPrincipalsFromToken(string token, string signingKey);
     }
 }

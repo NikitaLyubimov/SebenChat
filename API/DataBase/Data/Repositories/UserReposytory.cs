@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
@@ -6,13 +7,14 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 
-using DataBase.DTO;
-using DataBase.Interfaces;
-using DataBase.Entities;
-using DataBase.Identity;
-using System.Linq;
 
-namespace DataBase.Repositories
+using Infrustructure.Identity;
+using Core.Interfaces.Gateways.Reposytories;
+using Core.Domain.Entities;
+using Core.DTO.GatewayResponces.Repositories;
+using Core.DTO;
+
+namespace Infrustructure.Data.Repositories
 {
     public class UserReposytory : BaseReposytory<User, AppDbContext>, IUserReposytory
     {
@@ -23,20 +25,25 @@ namespace DataBase.Repositories
             _uManager = manager;
         }
 
+        public Task<bool> CheckPassword(User user, string password)
+        {
+            throw new NotImplementedException();
+        }
+
         public async Task<CreateUserResponce> Create(string firstName, string secondName, string email, string userName, string password)
         {
             var appUser = new AppUser { Email = email, UserName = userName };
             var identityResult = await _uManager.CreateAsync(appUser, password);
 
             if (!identityResult.Succeeded)
-                    return new CreateUserResponce(appUser.Id,userName, false, identityResult.Errors.Select(err => new Error(err.Code, err.Description)));
+                return new CreateUserResponce(appUser.Id, false, identityResult.Errors.Select(e => new Error(e.Code, e.Description)));
             var user = new User(firstName, secondName, userName, email, appUser.Id);
             
             _db.Users.Add(user);
             await _db.SaveChangesAsync();
-            
 
-            return new CreateUserResponce(appUser.Id,userName, identityResult.Succeeded, identityResult.Succeeded ? null : identityResult.Errors.Select(err => new Error(err.Code, err.Description)));
+
+            return new CreateUserResponce(appUser.Id, identityResult.Succeeded, identityResult.Succeeded ? null : identityResult.Errors.Select(e => new Error(e.Code, e.Description)));
         }
 
         public async Task<User> FindByName(string userName)

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace DataBase.Identity
+namespace Infrustructure.Identity
 {
     public class AppUser : IdentityUser
     {

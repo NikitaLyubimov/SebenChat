@@ -11,6 +11,7 @@ namespace Core.Interfaces.Gateways.Reposytories
         Task<List<TEntity>> GetAll();
         Task<TEntity> Delete(TEntity ent);
         Task<TEntity> GetById(long id);
+        Task<List<TEntity>> ListBySpec(ISpecification<TEntity> spec);
         Task<TEntity> Update(TEntity ent);
         Task<TEntity> FindOneBySpec(ISpecification<TEntity> spec);
     }

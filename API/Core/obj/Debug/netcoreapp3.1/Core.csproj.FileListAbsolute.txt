@@ -1,5 +1,7 @@
 D:\Projects\EncryptChat\API\Core\bin\Debug\netcoreapp3.1\Core.deps.json
 D:\Projects\EncryptChat\API\Core\bin\Debug\netcoreapp3.1\Core.dll
-D:\Projects\EncryptChat\API\Core\obj\Debug\netcoreapp3.1\Core.csprojAssemblyReference.cache
 D:\Projects\EncryptChat\API\Core\obj\Debug\netcoreapp3.1\Core.AssemblyInfoInputs.cache
 D:\Projects\EncryptChat\API\Core\obj\Debug\netcoreapp3.1\Core.AssemblyInfo.cs
+D:\Projects\EncryptChat\API\Core\bin\Debug\netcoreapp3.1\Core.pdb
+D:\Projects\EncryptChat\API\Core\obj\Debug\netcoreapp3.1\Core.dll
+D:\Projects\EncryptChat\API\Core\obj\Debug\netcoreapp3.1\Core.pdb

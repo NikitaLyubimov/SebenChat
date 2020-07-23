@@ -2,10 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-using DataBase.Entities;
-using DataBase;
+using Core.Domain.Entities;
 
-namespace DataBase.Repositories
+namespace Infrustructure.Data.Repositories
 {
     public class MessagesReposytory : BaseReposytory<Message, AppDbContext>
     {
