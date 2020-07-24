@@ -1,8 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 
 using API.ViewModels.Request;
-using API.Services.Interfaces;
+using API.ViewModels.Settings;
+using API.Presenters;
+using Core.Interfaces.Gateways.Reposytories;
+using Core.Interfaces.UseCases;
+using Core.DTO.UseCaseRequests;
 
 
 namespace API.Controllers
@@ -11,11 +16,27 @@ namespace API.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private IUserService _uService;
+        private IUserReposytory _uReposytory;
+        private IRegisterUserUseCase _registerUserUseCase;
+        private ILoginUserUseCase _loginUserUserCase;
+        private IRefreshTokenUseCase _refreshTokenUseCase;
+        private RegisterUserPresenter _registerUserPresenter;
+        private LoginUserPresenter _loginUserPresenter;
+        private RefreshTokenPresenter _refreshTokenPresenter;
 
-        public AuthController(IUserService uService)
+        private AuthSettings _authSettings;
+
+        public AuthController(IUserReposytory uReposytory, IRegisterUserUseCase registerUserUseCase, ILoginUserUseCase loginUserUseCase, IRefreshTokenUseCase refreshTokenUseCase,
+            RegisterUserPresenter registerUserPresenter, LoginUserPresenter loginUserPresenter, RefreshTokenPresenter refreshTokenPresenter, IOptions<AuthSettings> authSettings)
         {
-            _uService = uService;
+            _uReposytory = uReposytory;
+            _registerUserUseCase = registerUserUseCase;
+            _loginUserUserCase = loginUserUseCase;
+            _refreshTokenUseCase = refreshTokenUseCase;
+            _registerUserPresenter = registerUserPresenter;
+            _loginUserPresenter = loginUserPresenter;
+            _refreshTokenPresenter = refreshTokenPresenter;
+            _authSettings = authSettings.Value;
         }
         [HttpGet("index")]
         public async Task<string> Index()
@@ -25,13 +46,14 @@ namespace API.Controllers
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> Login([FromBody]LoginRequest request)
+        public async Task<ActionResult> Login([FromBody]API.ViewModels.Request.LoginRequest request)
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _uService.LoginUser(request.UserName, request.Password);
-            return result;
+            var ipAddress = Request.HttpContext.Connection.RemoteIpAddress?.ToString();
+            await _loginUserUserCase.Handle(new Core.DTO.UseCaseRequests.LoginRequest(request.UserName, request.Password, ipAddress), _loginUserPresenter);
+            return _loginUserPresenter.ContentResult;
 
         }
 
@@ -41,8 +63,8 @@ namespace API.Controllers
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
-            var result = await _uService.RegisterUser(request.FirstName, request.SecondName, request.UserName, request.Email, request.Password);
-            return result;
+            await _registerUserUseCase.Handle(new RegisterUserRequest(request.FirstName, request.SecondName, request.UserName, request.Email, request.Password), _registerUserPresenter);
+            return _registerUserPresenter.ContentResult;
 
            
         }
@@ -50,9 +72,10 @@ namespace API.Controllers
         [HttpPost("refresh")]
         public async Task<ActionResult> Refresh([FromBody]RefreshRequest request)
         {
-            var result = await _uService.Refresh(request.AccessToken, request.RefreshToken);
-
-            return result;
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+            await _refreshTokenUseCase.Handle(new RefreshTokenRequest(request.AccessToken, request.RefreshToken, _authSettings.SecretKey), _refreshTokenPresenter);
+            return _refreshTokenPresenter.ContentResult;
         }
 
 

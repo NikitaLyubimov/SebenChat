@@ -32,6 +32,9 @@
         "frameworks": {
           "netcoreapp3.1": {
             "projectReferences": {
+              "D:\\Projects\\EncryptChat\\API\\Core\\Core.csproj": {
+                "projectPath": "D:\\Projects\\EncryptChat\\API\\Core\\Core.csproj"
+              },
               "D:\\Projects\\EncryptChat\\API\\DataBase\\Infrustructure.csproj": {
                 "projectPath": "D:\\Projects\\EncryptChat\\API\\DataBase\\Infrustructure.csproj"
               }
@@ -152,6 +155,10 @@
             "Autofac": {
               "target": "Package",
               "version": "[5.2.0, )"
+            },
+            "Newtonsoft.Json": {
+              "target": "Package",
+              "version": "[12.0.3, )"
             }
           },
           "imports": [

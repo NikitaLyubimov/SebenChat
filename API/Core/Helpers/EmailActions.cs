@@ -1,30 +1,32 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Web;
 using System.IO;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Net.Mail;
 using System.Net;
 
-using DataBase.Repositories;
-using DataBase.Entities;
-using API.Tokens;
-using API.ViewModels;
+using Core.Interfaces.Gateways.Reposytories;
+using Core.Interfaces.Services;
+using Core.Domain.Entities;
+using Core.DTO.Email;
 using Newtonsoft.Json;
-using System.Web;
 
-namespace API.Actions
+
+namespace Core.Helpers
 {
     public class EmailActions
     {
-        private EmailTokenReposytory _tokenReposytory;
-        public EmailActions(EmailTokenReposytory tokenReposytory)
+        private IEmailTokenReposytory _tokenReposytory;
+        private ITokenFactory _tokenFactory;
+        private string _appUrl = "localhost:51816";
+        public EmailActions(IEmailTokenReposytory tokenReposytory, ITokenFactory tokenFactory)
         {
             _tokenReposytory = tokenReposytory;
+            _tokenFactory = tokenFactory;
         }
-        public async Task SenMessage(TokenFactory tokenFactory, string receiverEmail,long userId, string appUrl)
+        public async Task SenMessage(string receiverEmail,long userId)
         {
-            string emailConfToken = tokenFactory.GenerateToken();
+            string emailConfToken = _tokenFactory.GenerateToken();
 
             EmailConfirmToken newToken = new EmailConfirmToken(emailConfToken, userId);
             await _tokenReposytory.Add(newToken);
@@ -44,7 +46,7 @@ namespace API.Actions
             string encToken = emailConfToken.Trim().Replace("+", "%252b");
 
             m.Subject = "Confirm Email";
-            m.Body = $@"Confirm your email by following this link: https://{appUrl}/api/verify?token={HttpUtility.UrlEncode(encToken)}";
+            m.Body = $@"Confirm your email by following this link: https://{_appUrl}/api/verify?token={HttpUtility.UrlEncode(encToken)}";
 
 
             SmtpClient client = new SmtpClient();

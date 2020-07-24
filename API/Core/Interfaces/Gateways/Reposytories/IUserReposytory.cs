@@ -14,5 +14,6 @@ namespace Core.Interfaces.Gateways.Reposytories
         Task<User> FindByName(string userName);
 
         Task<bool> CheckPassword(User user, string password);
+        Task<User> GetByIdentityId(string id);
     }
 }

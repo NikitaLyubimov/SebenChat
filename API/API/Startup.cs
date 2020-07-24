@@ -12,16 +12,17 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 
-using DataBase.Entities;
-using DataBase.Identity;
-using DataBase.Interfaces;
-using DataBase.Repositories;
-using DataBase;
-using API.Tokens;
+using Autofac;
+
+using Infrustructure;
+using Infrustructure.Tokens;
+using Infrustructure.Data;
+using Infrustructure.Identity;
+using Core;
 using API.Actions;
 using API.ViewModels.Settings;
-using API.Services.Interfaces;
-using API.Services;
+using API.Presenters;
+
 
 
 namespace API
@@ -40,13 +41,13 @@ namespace API
         {
             services.AddControllers();
 
-            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default"), b => b.MigrationsAssembly("DataBase")));
-            services.AddDbContext<AppDbIdentityContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default"), b => b.MigrationsAssembly("DataBase")));
+            services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default"), b => b.MigrationsAssembly("Infrastructure")));
+            services.AddDbContext<AppDbIdentityContext>(options => options.UseSqlServer(Configuration.GetConnectionString("Default"), b => b.MigrationsAssembly("Infrastructure")));
 
             var authSettings = Configuration.GetSection(nameof(AuthSettings));
             services.Configure<AuthSettings>(authSettings);
 
-            services.AddIdentity<AppUser, IdentityRole>(o =>
+            services.AddIdentityCore<AppUser>(o =>
             {
                 o.Password.RequireLowercase = false;
                 o.Password.RequireUppercase = false;
@@ -125,16 +126,18 @@ namespace API
 
             services.AddCors();
 
-
-            services.AddScoped<UserReposytory>();
-            services.AddScoped<MessagesReposytory>();
-            services.AddScoped<JwtFactory>();
-            services.AddScoped<TokenFactory>();
-            services.AddScoped<EmailTokenReposytory>();
             services.AddScoped<EmailActions>();
+            services.AddScoped<RegisterUserPresenter>();
+            services.AddScoped<LoginUserPresenter>();
+            services.AddScoped<RefreshTokenPresenter>();
 
-            services.AddTransient<IUserService, UserService>();
+            services.AddOptions();
+        }
 
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            builder.RegisterModule(new CoreModule());
+            builder.RegisterModule(new InfrustructureModule());
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

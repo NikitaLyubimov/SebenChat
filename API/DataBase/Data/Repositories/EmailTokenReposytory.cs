@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
 
 using Core.Domain.Entities;
-using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
+using Core.Interfaces.Gateways.Reposytories;
+
 
 namespace Infrustructure.Data.Repositories
 {
-    public class EmailTokenReposytory : BaseReposytory<EmailConfirmToken, AppDbContext>
+    public class EmailTokenReposytory : BaseReposytory<EmailConfirmToken, AppDbContext>, IEmailTokenReposytory
     {
         public EmailTokenReposytory(AppDbContext db) : base(db) { }
 
