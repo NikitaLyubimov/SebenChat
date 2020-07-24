@@ -1,7 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -25,9 +22,10 @@ namespace Infrustructure.Data.Repositories
             _uManager = manager;
         }
 
-        public Task<bool> CheckPassword(User user, string password)
+        public async Task<bool> CheckPassword(User user, string password)
         {
-            throw new NotImplementedException();
+            var appUser = await _uManager.FindByIdAsync(user.IdentityId);
+            return await _uManager.CheckPasswordAsync(appUser, password);
         }
 
         public async Task<bool> ConfirmEmail(User user)
