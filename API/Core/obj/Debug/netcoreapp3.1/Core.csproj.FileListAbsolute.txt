@@ -6,4 +6,3 @@ D:\Projects\EncryptChat\API\Core\bin\Debug\netcoreapp3.1\Core.pdb
 D:\Projects\EncryptChat\API\Core\obj\Debug\netcoreapp3.1\Core.dll
 D:\Projects\EncryptChat\API\Core\obj\Debug\netcoreapp3.1\Core.pdb
 D:\Projects\EncryptChat\API\Core\bin\Debug\netcoreapp3.1\emailData.json
-D:\Projects\EncryptChat\API\Core\obj\Debug\netcoreapp3.1\Core.csprojAssemblyReference.cache

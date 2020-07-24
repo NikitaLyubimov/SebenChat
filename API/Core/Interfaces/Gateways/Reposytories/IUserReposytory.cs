@@ -15,5 +15,7 @@ namespace Core.Interfaces.Gateways.Reposytories
 
         Task<bool> CheckPassword(User user, string password);
         Task<User> GetByIdentityId(string id);
+        Task<bool> ConfirmEmail(User user);
+
     }
 }

@@ -24,7 +24,8 @@
     ".NETCoreApp,Version=v3.1": {
       "API/1.0.0": {
         "dependencies": {
-          "DataBase": "1.0.0",
+          "Core": "1.0.0",
+          "Infrustructure": "1.0.0",
           "MailKit": "2.6.0",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "3.1.4",
           "Microsoft.EntityFrameworkCore.Design": "3.1.3",
@@ -299,6 +300,17 @@
         },
         "compile": {
           "API.dll": {}
+        }
+      },
+      "Autofac/5.2.0": {
+        "runtime": {
+          "lib/netstandard2.1/Autofac.dll": {
+            "assemblyVersion": "5.2.0.0",
+            "fileVersion": "5.2.0.0"
+          }
+        },
+        "compile": {
+          "lib/netstandard2.1/Autofac.dll": {}
         }
       },
       "MailKit/2.6.0": {
@@ -1117,7 +1129,7 @@
       "Microsoft.IdentityModel.Protocols.OpenIdConnect/5.5.0": {
         "dependencies": {
           "Microsoft.IdentityModel.Protocols": "5.5.0",
-          "Newtonsoft.Json": "11.0.2",
+          "Newtonsoft.Json": "12.0.3",
           "System.IdentityModel.Tokens.Jwt": "6.5.1"
         },
         "runtime": {
@@ -1165,7 +1177,7 @@
       },
       "Microsoft.VisualStudio.Web.CodeGeneration.Contracts/3.1.0-preview1-19509-03": {
         "dependencies": {
-          "Newtonsoft.Json": "11.0.2"
+          "Newtonsoft.Json": "12.0.3"
         },
         "runtime": {
           "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Contracts.dll": {
@@ -1181,7 +1193,7 @@
         "dependencies": {
           "Microsoft.Extensions.DependencyInjection": "3.1.5",
           "Microsoft.VisualStudio.Web.CodeGeneration.Templating": "3.1.0-preview1-19509-03",
-          "Newtonsoft.Json": "11.0.2"
+          "Newtonsoft.Json": "12.0.3"
         },
         "runtime": {
           "lib/netstandard2.0/Microsoft.VisualStudio.Web.CodeGeneration.Core.dll": {
@@ -1243,7 +1255,7 @@
         "dependencies": {
           "Microsoft.CodeAnalysis.CSharp.Workspaces": "3.4.0-beta2-final",
           "Microsoft.VisualStudio.Web.CodeGeneration.Contracts": "3.1.0-preview1-19509-03",
-          "Newtonsoft.Json": "11.0.2",
+          "Newtonsoft.Json": "12.0.3",
           "NuGet.Frameworks": "4.7.0"
         },
         "runtime": {
@@ -1349,11 +1361,11 @@
           "System.Xml.XDocument": "4.3.0"
         }
       },
-      "Newtonsoft.Json/11.0.2": {
+      "Newtonsoft.Json/12.0.3": {
         "runtime": {
           "lib/netstandard2.0/Newtonsoft.Json.dll": {
-            "assemblyVersion": "11.0.0.0",
-            "fileVersion": "11.0.2.21924"
+            "assemblyVersion": "12.0.0.0",
+            "fileVersion": "12.0.3.23909"
           }
         },
         "compile": {
@@ -2484,20 +2496,34 @@
           "System.Xml.XmlDocument": "4.3.0"
         }
       },
-      "DataBase/1.0.0": {
+      "Core/1.0.0": {
         "dependencies": {
+          "Autofac": "5.2.0",
+          "Newtonsoft.Json": "12.0.3"
+        },
+        "runtime": {
+          "Core.dll": {}
+        },
+        "compile": {
+          "Core.dll": {}
+        }
+      },
+      "Infrustructure/1.0.0": {
+        "dependencies": {
+          "Core": "1.0.0",
           "Microsoft.AspNetCore.Identity.EntityFrameworkCore": "3.1.3",
           "Microsoft.EntityFrameworkCore": "3.1.5",
           "Microsoft.EntityFrameworkCore.SqlServer": "3.1.3",
           "Microsoft.Extensions.Configuration.EnvironmentVariables": "3.1.3",
           "Microsoft.Extensions.Configuration.FileExtensions": "3.1.3",
-          "Microsoft.Extensions.Configuration.Json": "3.1.3"
+          "Microsoft.Extensions.Configuration.Json": "3.1.3",
+          "System.IdentityModel.Tokens.Jwt": "6.5.1"
         },
         "runtime": {
-          "DataBase.dll": {}
+          "Infrustructure.dll": {}
         },
         "compile": {
-          "DataBase.dll": {}
+          "Infrustructure.dll": {}
         }
       },
       "Microsoft.AspNetCore.Antiforgery/3.1.0.0": {
@@ -4062,6 +4088,13 @@
       "serviceable": false,
       "sha512": ""
     },
+    "Autofac/5.2.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-V8dBH0dsv75uDzl7Sw+HkhKDPUw2eXnlMjcSVMH+tLo2s67MpTKGyDj1pDcpR+IF2u4YRs0s3/x7R88YJzIWvg==",
+      "path": "autofac/5.2.0",
+      "hashPath": "autofac.5.2.0.nupkg.sha512"
+    },
     "MailKit/2.6.0": {
       "type": "package",
       "serviceable": true,
@@ -4524,12 +4557,12 @@
       "path": "netstandard.library/1.6.1",
       "hashPath": "netstandard.library.1.6.1.nupkg.sha512"
     },
-    "Newtonsoft.Json/11.0.2": {
+    "Newtonsoft.Json/12.0.3": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-IvJe1pj7JHEsP8B8J8DwlMEx8UInrs/x+9oVY+oCD13jpLu4JbJU2WCIsMRn5C4yW9+DgkaO8uiVE5VHKjpmdQ==",
-      "path": "newtonsoft.json/11.0.2",
-      "hashPath": "newtonsoft.json.11.0.2.nupkg.sha512"
+      "sha512": "sha512-6mgjfnRB4jKMlzHSl+VD+oUc1IebOZabkbyWj2RiTgWwYPPuaK1H97G1sHqGwPlS5npiF5Q0OrxN1wni2n5QWg==",
+      "path": "newtonsoft.json/12.0.3",
+      "hashPath": "newtonsoft.json.12.0.3.nupkg.sha512"
     },
     "NuGet.Frameworks/4.7.0": {
       "type": "package",
@@ -5329,7 +5362,12 @@
       "path": "system.xml.xmlserializer/4.3.0",
       "hashPath": "system.xml.xmlserializer.4.3.0.nupkg.sha512"
     },
-    "DataBase/1.0.0": {
+    "Core/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Infrustructure/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -30,6 +30,14 @@ namespace Infrustructure.Data.Repositories
             throw new NotImplementedException();
         }
 
+        public async Task<bool> ConfirmEmail(User user)
+        {
+            var appUser = await _uManager.FindByIdAsync(user.IdentityId);
+            appUser.EmailConfirmed = true;
+            var result = await _uManager.UpdateAsync(appUser);
+            return result.Succeeded;
+        }
+
         public async Task<CreateUserResponce> Create(string firstName, string secondName, string email, string userName, string password)
         {
             var appUser = new AppUser { Email = email, UserName = userName };

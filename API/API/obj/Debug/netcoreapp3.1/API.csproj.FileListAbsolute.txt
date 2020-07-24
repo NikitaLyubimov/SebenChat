@@ -19,7 +19,6 @@ D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Log
 D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Logging.Abstractions.dll
 D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Options.dll
 D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\Microsoft.Extensions.Primitives.dll
-D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\DataBase.dll
 D:\Projects\EncryptChat\API\API\obj\Debug\netcoreapp3.1\API.csprojAssemblyReference.cache
 D:\Projects\EncryptChat\API\API\obj\Debug\netcoreapp3.1\staticwebassets\API.StaticWebAssets.Manifest.cache
 D:\Projects\EncryptChat\API\API\obj\Debug\netcoreapp3.1\staticwebassets\API.StaticWebAssets.xml
@@ -49,7 +48,6 @@ D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\runtimes\win-x86\native\
 D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\runtimes\unix\lib\netcoreapp2.0\System.Runtime.Caching.dll
 D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\runtimes\win\lib\netcoreapp2.0\System.Runtime.Caching.dll
 D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\runtimes\win\lib\netstandard2.0\System.Security.Cryptography.ProtectedData.dll
-D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\DataBase.pdb
 D:\Projects\EncryptChat\API\API\obj\Debug\netcoreapp3.1\API.csproj.CopyComplete
 D:\Projects\EncryptChat\API\API\obj\Debug\netcoreapp3.1\API.dll
 D:\Projects\EncryptChat\API\API\obj\Debug\netcoreapp3.1\API.pdb
@@ -147,3 +145,8 @@ D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.
 D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\System.Collections.Immutable.dll
 D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\System.Diagnostics.DiagnosticSource.dll
+D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\Autofac.dll
+D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\Core.dll
+D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\Infrustructure.dll
+D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\Core.pdb
+D:\Projects\EncryptChat\API\API\bin\Debug\netcoreapp3.1\Infrustructure.pdb

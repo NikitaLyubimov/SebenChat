@@ -2,3 +2,13 @@ D:\Projects\EncryptChat\API\DataBase\bin\Debug\netcoreapp3.1\Core.dll
 D:\Projects\EncryptChat\API\DataBase\obj\Debug\netcoreapp3.1\Infrustructure.csprojAssemblyReference.cache
 D:\Projects\EncryptChat\API\DataBase\obj\Debug\netcoreapp3.1\Infrustructure.AssemblyInfoInputs.cache
 D:\Projects\EncryptChat\API\DataBase\obj\Debug\netcoreapp3.1\Infrustructure.AssemblyInfo.cs
+D:\Projects\EncryptChat\API\DataBase\bin\Debug\netcoreapp3.1\emailData.json
+D:\Projects\EncryptChat\API\DataBase\bin\Debug\netcoreapp3.1\Infrustructure.deps.json
+D:\Projects\EncryptChat\API\DataBase\bin\Debug\netcoreapp3.1\Infrustructure.runtimeconfig.json
+D:\Projects\EncryptChat\API\DataBase\bin\Debug\netcoreapp3.1\Infrustructure.runtimeconfig.dev.json
+D:\Projects\EncryptChat\API\DataBase\bin\Debug\netcoreapp3.1\Infrustructure.dll
+D:\Projects\EncryptChat\API\DataBase\bin\Debug\netcoreapp3.1\Infrustructure.pdb
+D:\Projects\EncryptChat\API\DataBase\bin\Debug\netcoreapp3.1\Core.pdb
+D:\Projects\EncryptChat\API\DataBase\obj\Debug\netcoreapp3.1\Infrustructure.csproj.CopyComplete
+D:\Projects\EncryptChat\API\DataBase\obj\Debug\netcoreapp3.1\Infrustructure.dll
+D:\Projects\EncryptChat\API\DataBase\obj\Debug\netcoreapp3.1\Infrustructure.pdb

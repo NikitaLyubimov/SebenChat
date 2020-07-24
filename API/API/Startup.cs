@@ -19,7 +19,6 @@ using Infrustructure.Tokens;
 using Infrustructure.Data;
 using Infrustructure.Identity;
 using Core;
-using API.Actions;
 using API.ViewModels.Settings;
 using API.Presenters;
 
@@ -126,9 +125,9 @@ namespace API
 
             services.AddCors();
 
-            services.AddScoped<EmailActions>();
             services.AddScoped<RegisterUserPresenter>();
             services.AddScoped<LoginUserPresenter>();
+            services.AddScoped<VerifyEmailTokenPresenter>();
             services.AddScoped<RefreshTokenPresenter>();
 
             services.AddOptions();
