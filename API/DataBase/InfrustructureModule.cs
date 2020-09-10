@@ -15,6 +15,7 @@ namespace Infrustructure
             builder.RegisterType<UserReposytory>().As<IUserReposytory>().InstancePerLifetimeScope();
             builder.RegisterType<EmailTokenReposytory>().As<IEmailTokenReposytory>().InstancePerLifetimeScope();
             builder.RegisterType<MessagesReposytory>().As<IMessageReposytory>().InstancePerLifetimeScope();
+            builder.RegisterType<PublickKeyReposytory>().As<IPublickKeyReposytory>().InstancePerLifetimeScope();
             builder.RegisterType<JwtFactory>().As<IJwtFactory>().InstancePerLifetimeScope();
             builder.RegisterType<TokenFactory>().As<ITokenFactory>().InstancePerMatchingLifetimeScope();
             builder.RegisterType<JwtTokenValidator>().As<IJwtTokenValidator>().InstancePerMatchingLifetimeScope();

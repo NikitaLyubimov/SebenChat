@@ -20,6 +20,14 @@ namespace Infrustructure.Data
                 .HasForeignKey(m => m.SenderId)
                 .OnDelete(DeleteBehavior.NoAction);
 
+
+            modelBuilder.Entity<PublicKey>()
+                .HasOne(pk => pk.User)
+                .WithMany(u => u.PublicKeys)
+                .HasForeignKey(pk => pk.UserId)
+                .OnDelete(DeleteBehavior.NoAction);
+                
+
             modelBuilder.Entity<Message>()
                 .HasOne(m => m.Receiver)
                 .WithMany(u => u.MessagesReceiver)

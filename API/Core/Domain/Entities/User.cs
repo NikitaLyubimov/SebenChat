@@ -25,6 +25,7 @@ namespace Core.Domain.Entities
         public ICollection<Message> MessagesSender { get; set; }
         public ICollection<Message> MessagesReceiver { get; set; }
         public ICollection<EmailConfirmToken> EmailConfirmTokens { get; set; }
+        public ICollection<PublicKey> PublicKeys { get; set; }
 
         public IReadOnlyCollection<RefreshToken> RefreshTokens => _refreshTokens.AsReadOnly();
 

@@ -14,6 +14,7 @@ namespace Core
             builder.RegisterType<LoginUserUseCase>().As<ILoginUserUseCase>().InstancePerLifetimeScope();
             builder.RegisterType<RefreshTokenUseCase>().As<IRefreshTokenUseCase>().InstancePerLifetimeScope();
             builder.RegisterType<VerifyEmailTokenUseCase>().As<IVerifyEmailTokenUseCase>().InstancePerLifetimeScope();
+            builder.RegisterType<PublickKeyUseCase>().As<IPublickKeyUseCase>().InstancePerLifetimeScope();
             builder.RegisterType<EmailActions>();
         }
     }

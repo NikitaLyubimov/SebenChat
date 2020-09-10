@@ -13,6 +13,8 @@ namespace Core.Domain.Entities
         public long SenderId { get; set; }
         [Required]
         public long ReceiverId { get; set; }
+        [Required]
+        public bool Read { get; set; }
 
         public User Sender { get; set; }
         public User Receiver { get; set; }

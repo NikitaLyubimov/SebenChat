@@ -21,8 +21,9 @@ using Infrustructure.Identity;
 using Core;
 using API.ViewModels.Settings;
 using API.Presenters;
-
-
+using API.Hubs;
+using API.Providers;
+using Microsoft.AspNetCore.SignalR;
 
 namespace API
 {
@@ -114,6 +115,17 @@ namespace API
                             context.Response.Headers.Add("Token-Expired", "true");
                         }
                         return Task.CompletedTask;
+                    },
+
+                    OnMessageReceived = context =>
+                    {
+                        var accessToken = context.Request.Query["access_token"];
+                        var path = context.HttpContext.Request.Path;
+
+                        if (!string.IsNullOrEmpty(accessToken) && path.StartsWithSegments("/messagehub"))
+                            context.Token = accessToken;
+
+                        return Task.CompletedTask;
                     }
                 };
             });
@@ -129,6 +141,9 @@ namespace API
             services.AddScoped<LoginUserPresenter>();
             services.AddScoped<VerifyEmailTokenPresenter>();
             services.AddScoped<RefreshTokenPresenter>();
+            services.AddScoped<IUserIdProvider, CustomUserIdProvider>();
+
+            services.AddSignalR();
 
             services.AddOptions();
         }
@@ -159,6 +174,7 @@ namespace API
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHub<MessagesHub>("/messagehub");
             });
         }
     }
