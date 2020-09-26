@@ -3,6 +3,7 @@ using Core.UseCases;
 using Core.Helpers;
 
 using Autofac;
+using Core.Interfaces.Helpers;
 
 namespace Core
 {
@@ -15,7 +16,7 @@ namespace Core
             builder.RegisterType<RefreshTokenUseCase>().As<IRefreshTokenUseCase>().InstancePerLifetimeScope();
             builder.RegisterType<VerifyEmailTokenUseCase>().As<IVerifyEmailTokenUseCase>().InstancePerLifetimeScope();
             builder.RegisterType<PublickKeyUseCase>().As<IPublickKeyUseCase>().InstancePerLifetimeScope();
-            builder.RegisterType<EmailActions>();
+            builder.RegisterType<EmailActions>().As<IEmailActions>();
         }
     }
 }

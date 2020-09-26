@@ -8,16 +8,16 @@ using Core.Helpers;
 using Core.Interfaces;
 using Core.Interfaces.UseCases;
 using Core.Interfaces.Gateways.Reposytories;
-
+using Core.Interfaces.Helpers;
 
 namespace Core.UseCases
 {
     public class RegisterUserUsecase : IRegisterUserUseCase
     {
         IUserReposytory _userReposytory;
-        EmailActions _email;
+        IEmailActions _email;
 
-        public RegisterUserUsecase(IUserReposytory userReposytory, EmailActions email)
+        public RegisterUserUsecase(IUserReposytory userReposytory, IEmailActions email)
         {
             _userReposytory = userReposytory;
             _email = email;
@@ -31,7 +31,7 @@ namespace Core.UseCases
             if (responce.Success)
             {
                 var user = await _userReposytory.GetByIdentityId(responce.Id);
-                await _email.SenMessage(message.Email, user.Id);
+                await _email.SendMessage(message.Email, user.Id);
                 
             }
                 

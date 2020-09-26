@@ -7,14 +7,16 @@ using System.Net;
 
 using Core.Interfaces.Gateways.Reposytories;
 using Core.Interfaces.Services;
+using Core.Interfaces.Helpers;
 using Core.Domain.Entities;
 using Core.DTO.Email;
+
 using Newtonsoft.Json;
 
 
 namespace Core.Helpers
 {
-    public class EmailActions
+    public class EmailActions : IEmailActions
     {
         private IEmailTokenReposytory _tokenReposytory;
         private ITokenFactory _tokenFactory;
@@ -24,7 +26,10 @@ namespace Core.Helpers
             _tokenReposytory = tokenReposytory;
             _tokenFactory = tokenFactory;
         }
-        public async Task SenMessage(string receiverEmail,long userId)
+
+
+
+        public async Task SendMessage(string receiverEmail,long userId)
         {
             string emailConfToken = _tokenFactory.GenerateToken();
 
