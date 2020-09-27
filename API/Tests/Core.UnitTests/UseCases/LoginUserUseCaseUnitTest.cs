@@ -17,24 +17,37 @@ namespace Tests.Core.UnitTests.UseCases
     [TestFixture]
     public class LoginUserUseCaseUnitTest
     {
+        private Mock<IUserReposytory> _mockUserReposytory;
+        private Mock<IJwtFactory> _mockJwtFactory;
+        private Mock<ITokenFactory> _mockTokenFactory;
+        private Mock<IOutputPort<LoginResponce>> _mockOutputPort;
+
+        [SetUp]
+        public void Setup()
+        {
+            _mockUserReposytory = new Mock<IUserReposytory>();
+            _mockUserReposytory.Setup(repo => repo.FindByName(It.IsAny<string>())).ReturnsAsync(new User("", "", "", "", ""));
+
+            _mockJwtFactory = new Mock<IJwtFactory>();
+            _mockJwtFactory.Setup(factory => factory.GenerateEncodedToken(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new AccessToken("", 0));
+
+            _mockTokenFactory = new Mock<ITokenFactory>();
+
+            _mockOutputPort = new Mock<IOutputPort<LoginResponce>>();
+            _mockOutputPort.Setup(presenter => presenter.Handle(It.IsAny<LoginResponce>()));
+
+
+        }
+
+
+
         [Test]
         public async Task Handle_ValidCredentials_ShouldSucceed()
         {
-            var mockUserReposytory = new Mock<IUserReposytory>();
-            mockUserReposytory.Setup(repo => repo.FindByName(It.IsAny<string>())).ReturnsAsync(new User("", "", "", "", ""));
-            mockUserReposytory.Setup(repo => repo.CheckPassword(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(true);
+           _mockUserReposytory.Setup(repo => repo.CheckPassword(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(true);
 
-            var mockJwtFactory = new Mock<IJwtFactory>();
-            mockJwtFactory.Setup(factory => factory.GenerateEncodedToken(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new AccessToken("", 0));
-
-            var mockTokenFactory = new Mock<ITokenFactory>();
-
-            var useCase = new LoginUserUseCase(mockUserReposytory.Object, mockJwtFactory.Object, mockTokenFactory.Object);
-
-            var mockOutPutPort = new Mock<IOutputPort<LoginResponce>>();
-            mockOutPutPort.Setup(presenter => presenter.Handle(It.IsAny<LoginResponce>()));
-
-            var responce = await useCase.Handle(new LoginRequest("username", "password", "127.0.0.1"), mockOutPutPort.Object);
+            var useCase = new LoginUserUseCase(_mockUserReposytory.Object, _mockJwtFactory.Object, _mockTokenFactory.Object);
+            var responce = await useCase.Handle(new LoginRequest("username", "password", "127.0.0.1"), _mockOutputPort.Object);
 
             Assert.True(responce);
 
@@ -43,48 +56,27 @@ namespace Tests.Core.UnitTests.UseCases
         [Test]
         public async Task Handle_IncompleteCredentials_ShouldFailed()
         {
-            var mockUserReposytory = new Mock<IUserReposytory>();
-            mockUserReposytory.Setup(repo => repo.FindByName(It.IsAny<string>())).ReturnsAsync(new User("", "", "", "", ""));
-            mockUserReposytory.Setup(repo => repo.CheckPassword(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(false);
+            _mockUserReposytory.Setup(repo => repo.CheckPassword(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(false);
 
-            var mockJwtFactory = new Mock<IJwtFactory>();
-            mockJwtFactory.Setup(factory => factory.GenerateEncodedToken(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new AccessToken("", 0));
-
-            var mockTokenFactory = new Mock<ITokenFactory>();
-
-            var useCase = new LoginUserUseCase(mockUserReposytory.Object, mockJwtFactory.Object, mockTokenFactory.Object);
-
-            var mockOutputPort = new Mock<IOutputPort<LoginResponce>>();
-            mockOutputPort.Setup(presenter => presenter.Handle(It.IsAny<LoginResponce>()));
-
-            var responce = await useCase.Handle(new LoginRequest("", "password", "127.0.0.1"), mockOutputPort.Object);
+            var useCase = new LoginUserUseCase(_mockUserReposytory.Object, _mockJwtFactory.Object, _mockTokenFactory.Object);
+            var responce = await useCase.Handle(new LoginRequest("", "password", "127.0.0.1"), _mockOutputPort.Object);
 
             Assert.False(responce);
-            mockTokenFactory.Verify(factory => factory.GenerateToken(32), Times.Never);
+            _mockTokenFactory.Verify(factory => factory.GenerateToken(32), Times.Never);
 
         }
 
         [Test]
         public async Task Handler_IncorrectPassword_ShouldFail()
         {
-            var mockUserReposytory = new Mock<IUserReposytory>();
-            mockUserReposytory.Setup(repo => repo.FindByName(It.IsAny<string>())).ReturnsAsync(new User("", "", "", "", ""));
-            mockUserReposytory.Setup(repo => repo.CheckPassword(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(false);
+            _mockUserReposytory.Setup(repo => repo.CheckPassword(It.IsAny<User>(), It.IsAny<string>())).ReturnsAsync(false);
 
-            var mockJwtFactory = new Mock<IJwtFactory>();
-            mockJwtFactory.Setup(factory => factory.GenerateEncodedToken(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new AccessToken("", 0));
+            var useCase = new LoginUserUseCase(_mockUserReposytory.Object, _mockJwtFactory.Object, _mockTokenFactory.Object);
 
-            var mockTokenFactory = new Mock<ITokenFactory>();
-
-            var useCase = new LoginUserUseCase(mockUserReposytory.Object, mockJwtFactory.Object, mockTokenFactory.Object);
-
-            var mockOutputPort = new Mock<IOutputPort<LoginResponce>>();
-            mockOutputPort.Setup(presenter => presenter.Handle(It.IsAny<LoginResponce>()));
-
-            var result = await useCase.Handle(new LoginRequest("username", "wrongpassword", "127.0.01"), mockOutputPort.Object);
+            var result = await useCase.Handle(new LoginRequest("username", "wrongpassword", "127.0.01"), _mockOutputPort.Object);
 
             Assert.False(result);
-            mockTokenFactory.Verify(factory => factory.GenerateToken(32), Times.Never);
+            _mockTokenFactory.Verify(factory => factory.GenerateToken(32), Times.Never);
 
         }
     }
