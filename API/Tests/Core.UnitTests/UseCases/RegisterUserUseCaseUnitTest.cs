@@ -16,31 +16,17 @@ using Core.Domain.Entities;
 namespace Tests.Core.UnitTests.UseCases
 {
     [TestFixture]
-    public class RegisterUserUseCaseUnitTest
+    public class RegisterUserUseCaseUnitTest : UseCaseUnitTestBase<RegisterUserResponce>
     {
-        private Mock<IUserReposytory> _mockUserReposytory;
-        private Mock<IEmailActions> _mockEmailActions;
-        private Mock<IOutputPort<RegisterUserResponce>> _mockOutputPort;
-
-        [SetUp]
-        public void Setup()
-        {
-            _mockUserReposytory = new Mock<IUserReposytory>();
-            _mockUserReposytory.Setup(repo => repo.Create(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new CreateUserResponce("", true));
-            _mockUserReposytory.Setup(repo => repo.GetByIdentityId(It.IsAny<string>())).ReturnsAsync(new User("", "", "", "", ""));
-
-            _mockEmailActions = new Mock<IEmailActions>();
-            _mockEmailActions.Setup(email => email.SendMessage(It.IsAny<string>(), It.IsAny<long>())).Returns(Task.CompletedTask);
-
-            _mockOutputPort = new Mock<IOutputPort<RegisterUserResponce>>();
-            _mockOutputPort.Setup(presenter => presenter.Handle(It.IsAny<RegisterUserResponce>()));
-        }
-
         [Test]
         public async Task Handle_ValidCredentials_ShouldSucceed()
         {
+            
 
-            var registerUseCase = new RegisterUserUsecase(_mockUserReposytory.Object, _mockEmailActions.Object);
+            var mockEmailActions = new Mock<IEmailActions>();
+            mockEmailActions.Setup(email => email.SendMessage(It.IsAny<string>(), It.IsAny<long>())).Returns(Task.CompletedTask);
+
+            var registerUseCase = new RegisterUserUsecase(_mockUserReposytory.Object, mockEmailActions.Object);
 
             var responce = await registerUseCase.Handle(new RegisterUserRequest("name", "secName", "username", "email@email.ru", "password"), _mockOutputPort.Object);
 

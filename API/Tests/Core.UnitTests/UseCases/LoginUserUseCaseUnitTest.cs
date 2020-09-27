@@ -15,32 +15,8 @@ using Core.DTO.UseCaseRequests;
 namespace Tests.Core.UnitTests.UseCases
 {
     [TestFixture]
-    public class LoginUserUseCaseUnitTest
+    public class LoginUserUseCaseUnitTest : UseCaseUnitTestBase<LoginResponce>
     {
-        private Mock<IUserReposytory> _mockUserReposytory;
-        private Mock<IJwtFactory> _mockJwtFactory;
-        private Mock<ITokenFactory> _mockTokenFactory;
-        private Mock<IOutputPort<LoginResponce>> _mockOutputPort;
-
-        [SetUp]
-        public void Setup()
-        {
-            _mockUserReposytory = new Mock<IUserReposytory>();
-            _mockUserReposytory.Setup(repo => repo.FindByName(It.IsAny<string>())).ReturnsAsync(new User("", "", "", "", ""));
-
-            _mockJwtFactory = new Mock<IJwtFactory>();
-            _mockJwtFactory.Setup(factory => factory.GenerateEncodedToken(It.IsAny<string>(), It.IsAny<string>())).ReturnsAsync(new AccessToken("", 0));
-
-            _mockTokenFactory = new Mock<ITokenFactory>();
-
-            _mockOutputPort = new Mock<IOutputPort<LoginResponce>>();
-            _mockOutputPort.Setup(presenter => presenter.Handle(It.IsAny<LoginResponce>()));
-
-
-        }
-
-
-
         [Test]
         public async Task Handle_ValidCredentials_ShouldSucceed()
         {
